@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import TodoItem from "./todoItem";
+import './todoList.css';
 
-function App() {
+
+const App = () => {
+  const [todos, setTodos] = useState([]);
+  const [todoInput, setTodoInput] = useState("");
+
+  const handleAddTodo = () => {
+    if (todoInput.trim()) {
+      setTodos([...todos, todoInput]);
+      setTodoInput("");
+    }
+  };
+
+  const handleDeleteTodo = (index) => {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+  };
+
+  const handleInputChange = (event) => {
+    setTodoInput(event.target.value);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Todo List</h1>
+      <input value={todoInput} onChange={handleInputChange} />
+      <button onClick={handleAddTodo}>Add Todo</button>
+      <ul>
+        {todos.map((todo, index) => (
+          <TodoItem
+            key={index}
+            todo={todo}
+            handleDelete={() => handleDeleteTodo(index)}
+          />
+        ))}
+      </ul>
     </div>
   );
-}
+};
 
 export default App;
+
